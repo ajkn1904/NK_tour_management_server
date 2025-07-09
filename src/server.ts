@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { Server } from "http";
 import mongoose from "mongoose";
 import app from "./app";
