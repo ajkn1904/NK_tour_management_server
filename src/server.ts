@@ -3,15 +3,16 @@
 import { Server } from "http";
 import mongoose from "mongoose";
 import app from "./app";
-require("dotenv").config();
+import { envVars } from "./app/config/env";
+//require("dotenv").config();
 
 let server: Server;
 
-const PORT = 5000;
+const PORT = envVars.PORT;
 
 const startServer = async () => {
   try {
-    await mongoose.connect(`${process.env.DATABASE_URL}`);
+    await mongoose.connect(`${envVars.DATABASE_URL}`);
     console.log("connected to MongoDB using mongoose.");
 
     server = app.listen(PORT, () => {
@@ -60,8 +61,6 @@ process.on("uncaughtException", (error) => {
 //example:
 //throw new Error("Forgot to handle this Local error!");
 
-
-
 //SIGTERM signal handler
 process.on("SIGTERM", () => {
   console.log("SIGTERM signal received. Server is shutting down...");
@@ -74,7 +73,7 @@ process.on("SIGTERM", () => {
 });
 
 //SIGINT signal handler
-process.on("SIGINT", () => { 
+process.on("SIGINT", () => {
   console.log("SIGINT signal received. Server is shutting down...");
   if (server) {
     server.close(() => {
@@ -82,4 +81,4 @@ process.on("SIGINT", () => {
     });
   }
   process.exit(1);
-}); 
+});
