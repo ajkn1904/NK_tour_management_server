@@ -1,26 +1,22 @@
 import express from "express";
 import { Request, Response } from "express";
 import cors from "cors";
-import router from "./routes";
-import { globalErrorHandler } from "./middlewares/globalErrorHandler";
-import notFound from "./middlewares/notFoundRoute";
-
+import router from "./app/routes";
+import { globalErrorHandler } from "./app/middlewares/globalErrorHandler";
+import notFound from "./app/middlewares/notFoundRoute";
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-
 app.use("/api/v1", router);
 
-
 app.get("/", (req: Request, res: Response) => {
-    res.status(200).json({
-        message: "Welcome to NK Tour Management System Server!"
-    })
+  res.status(200).json({
+    message: "Welcome to NK Tour Management System Server!",
+  });
 });
-
 
 app.use(globalErrorHandler);
 app.use(notFound);
