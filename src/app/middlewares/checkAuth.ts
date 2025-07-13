@@ -27,7 +27,7 @@ export const checkAuth =
         );
       }
 
-      //req.user = verifiedToken;
+      req.user = verifiedToken;
       next();
     } catch (error) {
       next(error);
