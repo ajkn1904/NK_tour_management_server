@@ -6,10 +6,13 @@ interface EnvConfig {
   PORT: string;
   DATABASE_URL: string;
   NODE_ENVIRONMENT: "development" | "production";
+  JWT_ACCESS_SECRET: string, 
+  JWT_ACCESS_EXPIRES: string,
+  BCRYPT_SALT_ROUND: string
 }
 
 const loadEnvVars = (): EnvConfig => {
-  const requiredEnvVars: string[] = ["PORT", "DATABASE_URL", "NODE_ENVIRONMENT"];
+  const requiredEnvVars: string[] = ["PORT", "DATABASE_URL", "NODE_ENVIRONMENT","JWT_ACCESS_SECRET", "JWT_ACCESS_EXPIRES","BCRYPT_SALT_ROUND"];
 
   requiredEnvVars.forEach((key) => {
     if (!process.env[key]) {
@@ -21,6 +24,9 @@ const loadEnvVars = (): EnvConfig => {
     PORT: process.env.PORT as string,
     DATABASE_URL: process.env.DATABASE_URL as string,
     NODE_ENVIRONMENT: process.env.NODE_ENVIRONMENT as "development" | "production",
+    JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET as string, 
+    JWT_ACCESS_EXPIRES: process.env.JWT_ACCESS_EXPIRES as string, 
+    BCRYPT_SALT_ROUND: process.env.BCRYPT_SALT_ROUND as string, 
   };
 };
 
