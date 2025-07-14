@@ -1,12 +1,14 @@
-import { Request, Response } from "express";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
 import { AuthService } from "./auth.service";
 import sendResponse from "../../utils/sendResponse";
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../errorHelper/AppError";
 import { setAuthCookie } from "../../utils/setCookie";
+import { JwtPayload } from "jsonwebtoken";
 
-const credentialsLogin = catchAsync(async (req: Request, res: Response) => {
+const credentialsLogin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const loginInfo = await AuthService.credentialsLogin(req.body);
 
 
@@ -21,7 +23,7 @@ const credentialsLogin = catchAsync(async (req: Request, res: Response) => {
 });
 
 
-const getNewAccessToken = catchAsync(async (req: Request, res: Response) => {
+const getNewAccessToken = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const refreshToken = req.cookies.refreshToken;
 
   if(!refreshToken){
@@ -43,7 +45,7 @@ const getNewAccessToken = catchAsync(async (req: Request, res: Response) => {
 });
 
 
-const logout = catchAsync(async (req: Request, res: Response) => {
+const logout = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
  
   res.clearCookie("accessToken", {
     httpOnly: true,
@@ -65,10 +67,28 @@ const logout = catchAsync(async (req: Request, res: Response) => {
 });
 
 
+const resetPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+ 
+  const newPassword = req.body.newPassword;
+  const oldPassword = req.body.oldPassword;
+  const decodedToken = req.user;
+
+  await AuthService.resetPassword(oldPassword, newPassword, decodedToken as JwtPayload)
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Password Changed Successfully",
+    data: null,
+  });
+});
+
+
 
 export const AuthController = {
   credentialsLogin,
   getNewAccessToken,
-  logout
+  logout,
+  resetPassword
 
 };
