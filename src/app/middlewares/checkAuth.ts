@@ -4,6 +4,8 @@ import { StatusCodes } from "http-status-codes";
 import { verifyToken } from "../utils/jwt";
 import { envVars } from "../config/env";
 import { JwtPayload } from "jsonwebtoken";
+import { User } from "../modules/user/user.model";
+import { IsActive } from "../modules/user/user.interface";
 
 export const checkAuth =
   (...authRoles: string[]) =>
@@ -20,13 +22,28 @@ export const checkAuth =
         envVars.JWT_ACCESS_SECRET
       ) as JwtPayload;
 
+
+      const isUserExists = await User.findOne({email: verifiedToken.email});
+
+
+      if(!isUserExists){
+          throw new AppError(StatusCodes.BAD_REQUEST, "User does not exists!")
+      };
+      if(isUserExists.isActive === IsActive.BLOCKED || isUserExists.isActive === IsActive.INACTIVE){
+          throw new AppError(StatusCodes.BAD_REQUEST, `User is ${isUserExists.isActive}`)
+      };
+      if(isUserExists.isDeleted){
+          throw new AppError(StatusCodes.BAD_REQUEST, "User is deleted!")
+      };
+
       if (!authRoles.includes(verifiedToken.role)) {
         throw new AppError(
           StatusCodes.FORBIDDEN,
           "You do not have permission to access this route!"
         );
-      }
+      };
 
+      
       req.user = verifiedToken;
       next();
     } catch (error) {

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { UserRoutes } from "../modules/user/user.route";
-import { AuthRoutes } from "../auth/auth.routes";
+import { AuthRoutes } from "../modules/auth/auth.routes";
 
 export const router = Router();
 
