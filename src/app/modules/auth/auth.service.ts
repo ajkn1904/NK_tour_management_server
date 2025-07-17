@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../errorHelper/AppError";
-import { IUser } from "../user/user.interface";
 import { User } from "../user/user.model";
 import bcryptjs from "bcryptjs";
-import { createNewAccessTokenWithRefreshToken, createUserTokens } from "../../utils/userTokens";
+import { createNewAccessTokenWithRefreshToken } from "../../utils/userTokens";
 import { JwtPayload } from "jsonwebtoken";
 import { envVars } from "../../config/env";
 
+
+/*
 const credentialsLogin = async (payload: Partial<IUser>) => {
   const { email, password } = payload;
 
@@ -44,7 +45,7 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
     user: rest
   };
 };
-
+*/
 
 const getNewAccessToken = async (refreshToken: string) => {
 
@@ -76,7 +77,7 @@ const resetPassword = async (oldPassword: string, newPassword: string, decodedTo
 
 
 export const AuthService = {
-  credentialsLogin,
+  //credentialsLogin,
   getNewAccessToken,
   resetPassword
 };
