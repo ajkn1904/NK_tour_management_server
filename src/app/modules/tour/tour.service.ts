@@ -1,5 +1,6 @@
 import { ITour, ITourType } from "./tour.interface";
-import { Tour, TourType } from "./tour.model";
+import { Tour } from "./tour.model";
+import { TourType } from "./tourType.model";
 
 
 //---------------Tour API ------------------
@@ -62,10 +63,10 @@ const createTourType = async (payload: ITourType) => {
         throw new Error("Tour type already exists.");
     }
 
-    return await TourType.create({ name });
+    //console.log(payload);
+    return await TourType.create(payload);
 
 };
-
 
 
 const getAllTourTypes = async () => {
@@ -89,13 +90,16 @@ const updateTourType = async (id: string, payload: ITourType) => {
 
 
 const deleteTourType = async (id: string) => {
+    
     const existingTourType = await TourType.findById(id);
     if (!existingTourType) {
         throw new Error("Tour type not found.");
     }
 
     return await TourType.findByIdAndDelete(id);
+
 };
+
 
 
 export const TourService = {
