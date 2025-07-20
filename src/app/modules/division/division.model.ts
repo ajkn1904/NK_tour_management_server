@@ -28,7 +28,7 @@ divisionSchema.pre("save", async function (next) {
 })
 
 //for update pre hook
-divisionSchema.pre("findOneAndDelete", async function (next) {
+divisionSchema.pre("findOneAndUpdate", async function (next) {
 
     const division = this.getUpdate() as Partial<IDivision>
 

@@ -52,7 +52,7 @@ tourSchema.pre("save", async function (next) {
 })
 
 //for update pre hook
-tourSchema.pre("findOneAndDelete", async function (next) {
+tourSchema.pre("findOneAndUpdate", async function (next) {
 
     const tour = this.getUpdate() as Partial<ITour>
 
