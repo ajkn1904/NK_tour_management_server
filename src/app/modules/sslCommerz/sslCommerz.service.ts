@@ -4,7 +4,7 @@ import AppError from "../../errorHelper/AppError";
 import { ISSLCommerz } from "./sslCommerz.interface";
 import axios from "axios"
 
-const sslPaymentInt = async(payload: ISSLCommerz) => {
+const sslPaymentInit = async(payload: ISSLCommerz) => {
     try {
         const data = {
             store_id: envVars.SSL.STORE_ID,
@@ -56,5 +56,5 @@ const sslPaymentInt = async(payload: ISSLCommerz) => {
 }
 
 export const SSLService = {
-    sslPaymentInt
+    sslPaymentInit
 }
