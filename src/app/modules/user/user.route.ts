@@ -11,6 +11,8 @@ router.post("/register", validationRequest(createZodSchema), userController.crea
 
 router.get("/", checkAuth(Role.ADMIN, Role.SUPER_ADMIN) ,userController.getAllUsers);
 
+router.get("/me", checkAuth(...Object.values(Role)), userController.getMe)
+
 
 router.get("/:id", checkAuth(...Object.values(Role)), userController.getSingleUser)
 
