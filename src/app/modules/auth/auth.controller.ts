@@ -92,13 +92,13 @@ const logout = catchAsync(async (req: Request, res: Response, next: NextFunction
 });
 
 
-const resetPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+const changePassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
  
   const newPassword = req.body.newPassword;
   const oldPassword = req.body.oldPassword;
   const decodedToken = req.user;
 
-  await AuthService.resetPassword(oldPassword, newPassword, decodedToken as JwtPayload)
+  await AuthService.changePassword(oldPassword, newPassword, decodedToken as JwtPayload)
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
@@ -108,6 +108,51 @@ const resetPassword = catchAsync(async (req: Request, res: Response, next: NextF
   });
 });
 
+
+const resetPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+ 
+  const decodedToken = req.user;
+
+  await AuthService.resetPassword(req.body, decodedToken as JwtPayload)
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Password Reset Successfully",
+    data: null,
+  });
+});
+
+
+const setPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+ 
+  const decodedToken = req.user as JwtPayload;;
+  const {password} = req.body;
+
+  await AuthService.setPassword(decodedToken.userId, password)
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Password Added Successfully",
+    data: null,
+  });
+});
+
+const forgotPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+
+    const { email } = req.body;
+
+    await AuthService.forgotPassword(email);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: "Email Sent Successfully",
+        data: null,
+    })
+})
 
 const googleCallbackController = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
  
@@ -135,6 +180,9 @@ export const AuthController = {
   getNewAccessToken,
   logout,
   resetPassword,
+  changePassword,
+  setPassword,
+  forgotPassword,
   googleCallbackController
 
 };
