@@ -14,12 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = __importDefault(require("./app"));
-require("dotenv").config();
+const env_1 = require("./app/config/env");
+const seedSuperAdmin_1 = require("./app/utils/seedSuperAdmin");
+const redis_config_1 = require("./app/config/redis.config");
+//require("dotenv").config();
 let server;
-const PORT = 5000;
+const PORT = env_1.envVars.PORT;
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.connect(`${process.env.DATABASE_URL}`);
+        yield mongoose_1.default.connect(`${env_1.envVars.DATABASE_URL}`);
         console.log("connected to MongoDB using mongoose.");
         server = app_1.default.listen(PORT, () => {
             console.log(`NK Tour Management Server is listening to port ${PORT}`);
@@ -29,7 +32,11 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
         console.log(error);
     }
 });
-startServer();
+(() => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, redis_config_1.connectRedis)();
+    yield startServer();
+    yield (0, seedSuperAdmin_1.seedSuperAdmin)();
+}))();
 //unhandledRejection error handler
 process.on("unhandledRejection", (error) => {
     console.log("Unhandled Rejection Error Detected. Server is Shutting down...", error);
