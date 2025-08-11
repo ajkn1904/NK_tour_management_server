@@ -62,20 +62,6 @@ export const updateZodSchema = z.object({
     .trim()
     .optional(),
 
-  password: z
-    .string({ invalid_type_error: "Password must be a string" })
-    .min(6, { message: "Password must be at least 6 characters" })
-    .regex(/^(?=.*[A-Z])/, {
-      message: "Password must contain at least 1 uppercase letter.",
-    })
-    .regex(/^(?=.*[!@#$%^&*])/, {
-      message: "Password must contain at least 1 special character.",
-    })
-    .regex(/^(?=.*\d)/, {
-      message: "Password must contain at least 1 number.",
-    })
-    .optional(),
-
   phone: z
     .string({ invalid_type_error: "Phone must be a string" })
     .regex(/^(?:\+8801\d{9}|01\d{9})$/, {
