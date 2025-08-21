@@ -42,6 +42,7 @@ router.get("/", TourController.getAllTours);
 router.post(
     "/create",
     checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+    multerUpload.array("files"),
     validationRequest(createTourZodSchema),
     TourController.createTour
 );
